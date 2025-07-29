@@ -314,36 +314,27 @@
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        // Google Sheets API Configuration
-        const SHEET_ID = '10sAehga9IRD1rhIBxIbFiU5dDArtDSLiY-q4sUd52iI';
-        const API_KEY = 'AIzaSyAFdxuLZ11QTlE6FNUXGoPrGxrQZhreoKo';
-        const SHEET_NAME = 'Menu'; // ชื่อ Sheet ใน Google Sheets
+        // URL ของ Web App คุณ
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzQFtk2oLCRFYi8luXu-el0Vj7PXF7wALMFLvieuadsnHH5aJT5B25kB0sWjloJsjL56Q/exec';
         
-        // ฟังก์ชันดึงข้อมูลจาก Google Sheets
+        // ฟังก์ชันดึงข้อมูลจาก Google Apps Script
         async function fetchMenuData() {
             try {
-                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
-                const response = await axios.get(url);
-                const data = response.data.values;
+                const response = await fetch(SCRIPT_URL);
+                const data = await response.json();
                 
-                // แปลงข้อมูลจาก Array เป็น Object
-                const headers = data[0];
-                const menuItems = data.slice(1).map(row => {
-                    const item = {};
-                    headers.forEach((header, index) => {
-                        item[header] = row[index] || '';
-                    });
-                    return item;
-                });
-                
-                displayMenu(menuItems);
-                setupFilterButtons(menuItems);
-                setupSearch(menuItems);
+                if (data.status === 'success') {
+                    displayMenu(data.data);
+                    setupFilterButtons(data.data);
+                    setupSearch(data.data);
+                } else {
+                    throw new Error(data.message);
+                }
             } catch (error) {
                 console.error('Error fetching menu data:', error);
                 document.getElementById('menu-container').innerHTML = `
                     <div class="loading">
-                        <p>เกิดข้อผิดพลาดในการโหลดเมนู กรุณาลองใหม่ภายหลัง</p>
+                        <p>เกิดข้อผิดพลาดในการโหลดเมนู: ${error.message}</p>
                     </div>
                 `;
             }
