@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เมนูอาหาร ร้านน้องไบรท์</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #FF6B00;
+            --secondary-color: #FFA559;
+            --light-color: #FFE6C7;
+            --dark-color: #454545;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Prompt', sans-serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: var(--dark-color);
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80') center/cover;
+            opacity: 0.2;
+            z-index: 0;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+        
+        .filter-btn {
+            background: white;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .search-box {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            border: 2px solid #ddd;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            padding-left: 3rem;
+        }
+        
+        .search-box input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.2);
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+        
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .menu-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+        
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.15);
+        }
+        
+        .menu-card-img {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .menu-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .menu-card:hover .menu-card-img img {
+            transform: scale(1.05);
+        }
+        
+        .menu-card-content {
+            padding: 1.5rem;
+        }
+        
+        .menu-card-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .menu-card-price {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .menu-card-desc {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .menu-card-category {
+            display: inline-block;
+            background: var(--light-color);
+            color: var(--primary-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .add-to-cart {
+            display: block;
+            width: 100%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            text-align: center;
+        }
+        
+        .add-to-cart:hover {
+            background: #e05a00;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.2rem;
+            color: #666;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary-color);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        footer {
+            background: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            color: var(--primary-color);
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .menu-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>เมนูอาหาร ร้านน้องไบรท์</h1>
+        <p>อาหารตามสั่งอร่อยๆ ทำสดใหม่ทุกวัน พร้อมเสิร์ฟถึงที่คุณ</p>
+    </header>
+    
+    <div class="container">
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-category="all">ทั้งหมด</button>
+            <button class="filter-btn" data-category="อาหารจานเดียว">อาหารจานเดียว</button>
+            <button class="filter-btn" data-category="กับข้าว">กับข้าว</button>
+            <button class="filter-btn" data-category="ผัด">ผัด</button>
+            <button class="filter-btn" data-category="ต้ม">ต้ม</button>
+            <button class="filter-btn" data-category="เครื่องดื่ม">เครื่องดื่ม</button>
+        </div>
+        
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="search-input" placeholder="ค้นหาชื่อเมนู...">
+        </div>
+        
+        <div id="menu-container">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>กำลังโหลดเมนู...</p>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <h3>ร้านน้องไบรท์ อาหารตามสั่ง</h3>
+        <p>⌚ เปิดบริการทุกวัน 08:00 - 20:00 น.</p>
+        <p>📞 089-123-4567</p>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-line"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+        <p>© 2023 ร้านน้องไบรท์. สงวนลิขสิทธิ์.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        // Google Sheets API Configuration
+        const SHEET_ID = '10sAehga9IRD1rhIBxIbFiU5dDArtDSLiY-q4sUd52iI';
+        const API_KEY = 'AIzaSyAFdxuLZ11QTlE6FNUXGoPrGxrQZhreoKo';
+        const SHEET_NAME = 'Menu'; // ชื่อ Sheet ใน Google Sheets
+        
+        // ฟังก์ชันดึงข้อมูลจาก Google Sheets
+        async function fetchMenuData() {
+            try {
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
+                const response = await axios.get(url);
+                const data = response.data.values;
+                
+                // แปลงข้อมูลจาก Array เป็น Object
+                const headers = data[0];
+                const menuItems = data.slice(1).map(row => {
+                    const item = {};
+                    headers.forEach((header, index) => {
+                        item[header] = row[index] || '';
+                    });
+                    return item;
+                });
+                
+                displayMenu(menuItems);
+                setupFilterButtons(menuItems);
+                setupSearch(menuItems);
+            } catch (error) {
+                console.error('Error fetching menu data:', error);
+                document.getElementById('menu-container').innerHTML = `
+                    <div class="loading">
+                        <p>เกิดข้อผิดพลาดในการโหลดเมนู กรุณาลองใหม่ภายหลัง</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // ฟังก์ชันแสดงผลเมนู
+        function displayMenu(menuItems, filter = 'all', searchTerm = '') {
+            const menuContainer = document.getElementById('menu-container');
+            
+            // กรองเมนูตามหมวดหมู่และคำค้นหา
+            let filteredItems = menuItems;
+            
+            if (filter !== 'all') {
+                filteredItems = filteredItems.filter(item => item.Category === filter);
+            }
+            
+            if (searchTerm) {
+                const term = searchTerm.toLowerCase();
+                filteredItems = filteredItems.filter(item => 
+                    item.Name.toLowerCase().includes(term) || 
+                    item.Description.toLowerCase().includes(term)
+                );
+            }
+            
+            // ถ้าไม่มีเมนูที่ตรงกับเงื่อนไข
+            if (filteredItems.length === 0) {
+                menuContainer.innerHTML = `
+                    <div class="loading">
+                        <p>ไม่พบเมนูที่คุณค้นหา</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // สร้าง HTML สำหรับเมนู
+            let menuHTML = '<div class="menu-grid">';
+            
+            filteredItems.forEach(item => {
+                menuHTML += `
+                    <div class="menu-card" data-category="${item.Category}">
+                        <div class="menu-card-img">
+                            <img src="${item.Image || 'https://via.placeholder.com/300x200?text=No+Image'}" alt="${item.Name}">
+                        </div>
+                        <div class="menu-card-content">
+                            <span class="menu-card-category">${item.Category}</span>
+                            <h3 class="menu-card-title">
+                                ${item.Name}
+                                <span class="menu-card-price">${item.Price} บาท</span>
+                            </h3>
+                            <p class="menu-card-desc">${item.Description}</p>
+                            <button class="add-to-cart" data-id="${item.ID}">
+                                <i class="fas fa-cart-plus"></i> สั่งอาหาร
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            menuHTML += '</div>';
+            menuContainer.innerHTML = menuHTML;
+            
+            // เพิ่ม Event Listener สำหรับปุ่มสั่งอาหาร
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', function() {
+                    const itemId = this.getAttribute('data-id');
+                    addToCart(itemId);
+                });
+            });
+        }
+        
+        // ฟังก์ชันตั้งค่าปุ่มกรองหมวดหมู่
+        function setupFilterButtons(menuItems) {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // เอา class active ออกจากปุ่มทั้งหมด
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // เพิ่ม class active ให้ปุ่มที่คลิก
+                    this.classList.add('active');
+                    
+                    const category = this.getAttribute('data-category');
+                    displayMenu(menuItems, category, document.getElementById('search-input').value);
+                });
+            });
+        }
+        
+        // ฟังก์ชันตั้งค่าการค้นหา
+        function setupSearch(menuItems) {
+            const searchInput = document.getElementById('search-input');
+            
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.trim();
+                const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-category');
+                displayMenu(menuItems, activeFilter, searchTerm);
+            });
+        }
+        
+        // ฟังก์ชันเพิ่มลงตะกร้า (ตัวอย่าง)
+        function addToCart(itemId) {
+            alert(`เพิ่มเมนู ID: ${itemId} ลงในตะกร้าเรียบร้อยแล้ว`);
+            // ในแอปจริงควรมีระบบตะกร้าสินค้าที่ซับซ้อนกว่า
+        }
+        
+        // โหลดข้อมูลเมนูเมื่อหน้าเว็บโหลดเสร็จ
+        document.addEventListener('DOMContentLoaded', fetchMenuData);
+    </script>
+</body>
+</html>
